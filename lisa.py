@@ -1,6 +1,5 @@
 '''
 Lisa is a code to model the performance of solar cells using an extended Hovel model.
-Author: Piotr Kowalczewski
 
 Reference technical paper:
 Piotr Kowalczewski, Lisa Redorici, Angelo Bozzola, Lucio Claudio Andreani,
