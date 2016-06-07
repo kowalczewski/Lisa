@@ -2,6 +2,7 @@
 
 Lisa is a code to model the performance of solar cells using an extended Hovel model.
 
+Lisa solves analytically the drift-diffusion equations.
 The idea is to perform fast calculations to show basic trends. 
 Lisa is not intended to replace more sophisticated TCAD device simulators.
 
