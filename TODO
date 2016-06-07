@@ -1,0 +1,5 @@
+- add light-trapping factor (without interference effects in thin film, probably requires to modify the model)
+- add more matplotlib plot examples (contour)
+- implement silver back reflector (see function for EQE)
+- add SRH recombination
+- add more comprehensive error handling
