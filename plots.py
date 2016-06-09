@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 import numpy as np
+import scipy.interpolate as interp
 import matplotlib.pyplot as plt
 import math
 import sys
@@ -27,7 +28,7 @@ if __name__ == "__main__":
 	
 	"""
         Usage: python plots.py [type of the plot]
-        Possible types: jv, panel, panel_comparison
+        Possible types: jv, panel, panel_comparison, contour
 	"""
 
 	def myround(x, base=5.0):
@@ -39,7 +40,7 @@ if __name__ == "__main__":
 
 		# read JV characteristic
 		v_vec = []
-		j_vec = []	
+		j_vec = []
 		with open("./Results/"+jv_filename) as jv_f:
 			# read Jsc and Voc
 			voc = float(jv_f.readline())
@@ -194,9 +195,45 @@ if __name__ == "__main__":
 		
 		plt.show()
 
+	def plot_contour():
+		# http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.contourf
+			
+		plot_filename = sys.argv[2]
+			
+		th_vec = []
+		srv_vec = []
+		eff_vec = []
+			
+		with open("./Results/"+plot_filename) as plot_f:
+			for line in plot_f:
+				line = line.split()
+				th_vec.append(float(line[0]))
+				srv_vec.append(float(line[1]))
+				eff_vec.append(float(line[5]))	
+			
+		X, Y = np.meshgrid(th_vec,srv_vec)
+		Z = interp.griddata((th_vec,srv_vec),eff_vec,(X,Y))
+				
+		plt.contourf(X, Y, Z, 100)            
+		plt.xscale('log')
+		
+		plt.ylabel('SRV (cm/s)')
+		plt.xlabel('Thickness (um)')
+		
+		tick_min = np.ceil(min(eff_vec))
+		tick_max = np.floor(max(eff_vec))
+		tick_no = tick_max-tick_min + 1
+		
+		tick_vec = np.linspace(tick_min, tick_max, tick_no)
+		
+		plt.colorbar(ticks=tick_vec, label='Efficiency (%)')
+		
+		plt.show()
+		
 	# ============================= PLOTS =============================
 
 	if (sys.argv[1] == "jv"): plot_JV()
 	elif (sys.argv[1] == "panel"): plot_panel() 
-	elif (sys.argv[1] == "panel_comparison"): plot_panel_comparison() 
+	elif (sys.argv[1] == "panel_comparison"): plot_panel_comparison()
+	elif (sys.argv[1] == "contour"): plot_contour()
 	
