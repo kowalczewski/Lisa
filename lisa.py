@@ -1,10 +1,11 @@
 '''
-Lisa is a code to model the performance of solar cells using an extended Hovel model.
+Lisa is a code to model the performance of solar cells using an extended Hovel 
+model.
 
 Reference technical paper:
 Piotr Kowalczewski, Lisa Redorici, Angelo Bozzola, Lucio Claudio Andreani,
-"Silicon solar cells reaching the efficiency limits: from simple to complex modelling,"
-Journal of Optics 18, 054001 (2016)
+"Silicon solar cells reaching the efficiency limits: from simple to complex 
+modelling," Journal of Optics 18, 054001 (2016)
 
 If you use this code for your research, please cite the paper above.
 
@@ -37,12 +38,9 @@ import sys
 import parameters as params
 
 if __name__ == "__main__":
-    
-    """
-        Usage: python p.py [thickness in um] [SRV in cm/s]
-        """
+    """ Usage: python p.py [thickness in um] [SRV in cm/s] """
 
-    # ====================================== PHYSICAL CONSTANTS ======================================
+    # ======================== PHYSICAL CONSTANTS ========================
     # Planck's constant, (eV*s)
     h = 4.135667516 * 1E-15      
     # speed of light (m/s)
@@ -66,12 +64,12 @@ if __name__ == "__main__":
     N_B = max(params.N_a_B,params.N_d_B)
     N_E = max(params.N_a_E,params.N_d_E)
 
-    # Band-gap narrowing
-    # Defines BGN according to Schenk
-    # See: Schenk, J. Appl. Phys. 84, 3684-95,1998
-    # Returns delta_Eg in eV
-    # We use our own parametrization prepared for params.ni_0 = 9.65E9
-    # Can be checked with http://www.pvlighthouse.com.au/calculators/Band%20gap%20calculator/Band%20gap%20calculator.aspx
+    # Band-gap narrowing is defined according to Schenk.
+    # See: Schenk, J. Appl. Phys. 84, 3684-95,1998.
+    # Returns delta_Eg in eV.
+    # We use our own parametrization prepared for params.ni_0 = 9.65E9.
+    # Can be checked with 
+    # http://www.pvlighthouse.com.au/calculators/Band%20gap%20calculator/Band%20gap%20calculator.aspx
     def bgn(N_dop):
         A1 = -1.63096E-5;
         A2 = 0.10876;
@@ -85,8 +83,9 @@ if __name__ == "__main__":
     ni_B = np.sqrt(params.ni_0**2 *np.exp(bgn(N_B)/(kB*params.T)) )
     ni_E = np.sqrt(params.ni_0**2 *np.exp(bgn(N_E)/(kB*params.T)) )
 
-    # built-in potential of the junction
-    # Eq. (6.2) from Nelson, The Physics of Solar Cells (London: Imperial College Press), 2003
+    # Built-in potential of the junction.
+    # Eq. (6.2) from Nelson, The Physics of Solar Cells 
+    # (London: Imperial College Press), 2003
     Vbi=kB_J*params.T/q * np.log(N_B*N_E/(params.ni_0**2))
 
     # Width of SCR in n-type and p-type
@@ -100,25 +99,29 @@ if __name__ == "__main__":
     w_n = params.th_emitter-W_E_scr
 
     if (w_n<0):
-        print('\nWarning: thickness of the quasi-neutral n-type region is negative! Change the doping.\n')
+        print('\nWarning: thickness of the quasi-neutral n-type region \
+              is negative! Change the doping.\n')
 
-    # ====================================== OUTPUT ======================================
+    # ======================== OUTPUT ========================
     if (params.params_flag):
         print('\n============ Parameters of the structure ============\n')
-        print('Built-in potential of the junction (V): \t\t %.3f' % Vbi)
-        print('Cell thickness (um): \t\t\t\t\t %.3f' %  (th*1E4))
-        print('Emitter thickness (um): \t\t\t\t %.3f' % (params.th_emitter*1E4))
-        print('SCR thickness (um): \t\t\t\t\t %.3f' % (w_scr*1E4))
-        print('Thickness of the quasi-neutral n-type region (um): \t %.3f' %  (w_n*1E4))
+        print('Built-in potential of the junction (V): \t\t {:.3f}'
+              .format(Vbi))
+        print('Cell thickness (um): \t\t\t\t\t {:.3f}'.format(th*1E4))
+        print('Emitter thickness (um): \t\t\t\t {:.3f}'
+              .format(params.th_emitter*1E4))
+        print('SCR thickness (um): \t\t\t\t\t {:.3f}'.format(w_scr*1E4))
+        print('Thickness of the quasi-neutral n-type region (um): \t {:.3f}'
+              .format(w_n*1E4))
 
     en_vec = np.linspace(params.en_start,params.en_stop,params.en_points)
 
-    # ====================================== EXTERNAL DATA FILES ======================================
-	# OPTICAL FUNCTIONS OF SILICON
-	# Default optical functions taken from Green, Sol. Energy Mat. Sol. Cells 92 1305-10, 2008
-	# data file has format:
-	# Energy	Wavelength	eps1	eps2	n	k	Absorption coefficient
-    # eV    nm                                                      cm-1
+    # ======================== EXTERNAL DATA FILES ========================
+    # Optical functions of silicon. Default optical functions taken from 
+    # Green, Sol. Energy Mat. Sol. Cells 92 1305-10, 2008.
+    # The data file has the following format:
+    # Energy (eV) Wavelength (nm) eps1 eps2 n k Absorption coefficient (cm-1)
+    # 
     en_vec_TEMP = []
     n_vec_TEMP = []
     abs_coeff_vec_TEMP = []                        
@@ -135,10 +138,8 @@ if __name__ == "__main__":
     n_vec = np.interp(en_vec, en_vec_TEMP, n_vec_TEMP)
     abs_coeff_vec = np.interp(en_vec, en_vec_TEMP, abs_coeff_vec_TEMP)
 
-    # SOLAR SPECTRUM
-    # units:
-    # Energy  AM1.5G
-    # eV      Wm-2eV-1
+    # Solar spectrum. Units:
+    # Energy (eV)  AM1.5G (Wm-2eV-1)
     en_vec_TEMP = []
     am15g_vec_TEMP = []
     for line in open("./Data/"+params.solar_f):
@@ -151,12 +152,13 @@ if __name__ == "__main__":
     am15g_vec = np.interp(en_vec, en_vec_TEMP, am15g_vec_TEMP)
     
     # Integrated solar spectrum/energy -- for spect_fact
-    # I've checked and such a simple notation works
+    # (such a simple notation works).
     solar_spect_int = np.trapz(am15g_vec/en_vec,en_vec)
 
-    # For a given thickness, prepare alpha_LT -- effective absorption coefficient (including light trapping)
-    # Approximation from Green (instead of integrating)
-    # See: Green, Prog. Photovolt., Res. Appl. 10 235-41 (2002)
+    # For a given thickness, prepare alpha_LT -- effective absorption 
+    # coefficient (including light trapping). Approximation from Green 
+    # (instead of integrating), see: Green, Prog. Photovolt.,
+    # Res. Appl. 10 235-41 (2002).
     def alpha_LT_func(i):
         a = 0.935
         b = 0.67        
@@ -166,18 +168,21 @@ if __name__ == "__main__":
         return abs_coeff_vec[i] * eff_LPE
 
     # Diffusion length calculated for Auger recombination
-    # Model taken from: Richter A, Glunz S W, Werner F, Schmidt J and Cuevas A, Phys. Rev. B 86, 165202 (2012)
+    # Model taken from: Richter A et al., Phys. Rev. B 86, 165202 (2012)
+    # Notation:
     # D -- diffusion coefficient (cm2/s)
     # v -- voltage (V)
     # Nd -- donor doping (cm-3)
     # Na -- acceptor doping (cm-3)
-    # Approximation: n and p are not calculated from d-d equations; they are taken from approximate formulas.
-    # We have checked it and it is a pretty good approximation (the self-consisten approach is not necessary in this case).
+    # Approximation: n and p are not calculated from d-d equations; 
+    # they are taken from approximate formulas. We have checked it and it is 
+    # a pretty good approximation (the self-consisten approach is not 
+    # necessary in this case).
     def L_Auger(D,v,Nd,Na):
         
-        # approximation for voltage close to 0
-        # check if this can be done better
-        # if voltage is lower than 0.01, there is "divide by zero encountered in double_scalars" exception thrown
+        # Approximation for voltage close to 0 (check if this can be done 
+        # better). If voltage is lower than 0.01, there is "divide by zero 
+        # encountered in double_scalars" exception thrown.
         # dn term from illumination should be added at low voltage
         if (v<0.01):
             v=0.01
@@ -200,50 +205,34 @@ if __name__ == "__main__":
         g_eeh = 1.0 + 13.0 * (1.0 - np.tanh(pow((n0 / N0_eeh),0.66)))
         g_ehh = 1.0 + 7.5 * (1.0 - np.tanh(pow((p0 / N0_ehh),0.63)))
         
-        # dn
-        # We calcualte dn from Eq. (2) from Richter A, Hermle M and Glunz S W, IEEE J. Photovolt. 3 1184-91 (2013)
-        # Quadratic equation
+        
+        # We calcualte dn from Eq. (2) from Richter et al., 
+        # IEEE J. Photovolt. 3 1184-91 (2013).
         eq_a = 1.0
         eq_b = n0+p0
         eq_c = n0*p0-ni**2 *np.exp(q*v/(kB_J*params.T))
         eq_delta = eq_b**2 -4*eq_a*eq_c
         dn = (-eq_b+np.sqrt(eq_delta))/(2*eq_a)
         
-        # Auger recombination rate (1/cm3s)
-        # see Eq. (2) from Richter2013 and Eq. (18) from Richter2012 (full citation above)
+        # Auger recombination rate (1/cm3s), see Eq. (2) from Richter2013 
+        # and Eq. (18) from Richter2012 (full citations above).
         R_Aug = ni**2 * (np.exp(q*v/(kB_J*params.T)) - 1 ) * ( 2.5e-31 * g_eeh * n0 + 8.5E-32 * g_ehh * p0 + 3E-29 * dn**0.92)
         
         tau = dn/R_Aug
         
-        # diffusion length (cm)
+        # Diffusion length (cm).
         L = np.sqrt(D*tau)    
 
         return L
 
-
-    # ==========================================================
-    # TEST
-    # inlucde SRH recombination
-    #L_B_Aug = L_B
-    #t_B_Aug = t_B
-
-    ## diffusion length in cm
-    #L_B_SRH = 200E-4
-    #t_B_SRH = L_B_SRH**2 / params.D_B
-
-    #t_B = t_B_SRH * t_B_Aug / (t_B_SRH + t_B_Aug)
-    #L_B = np.sqrt(t_B*params.D_B)
-        
-    # ==========================================================
-
-    # p as a f of voltage
+    # Concentration of holes as a f of voltage.
     def p(v):
         ni = np.sqrt(params.ni_0**2 *np.exp(bgn(N_B)/(kB*params.T)) )
         p0 = 0.5*(N_B + np.sqrt((N_B)*(N_B) + 4 * ni**2))
         n0 = ni**2 / p0
         
-        # We need to calcualte dn from Eq. (2) Richter 2013 (full citation above)
-        # Quadratic equation
+        # We need to calcualte dn from Eq. (2) Richter 2013 
+        # (full citation above).
         eq_a = 1.0
         eq_b = n0+p0
         eq_c = n0*p0-ni**2 *np.exp(q*v/(kB_J*params.T))
@@ -259,8 +248,8 @@ if __name__ == "__main__":
         n0 = 0.5*(N_E + np.sqrt((N_E)*(N_E) + 4 * ni**2))
         p0 = ni**2 / n0
         
-        # We need to calcualte dn from Eq. (2) Richter 2013 (full citation above)
-        # Quadratic equation
+        # We need to calcualte dn from Eq. (2) Richter 2013 
+        # (full citation above).
         eq_a = 1.0
         eq_b = n0+p0
         eq_c = n0*p0-ni**2 *np.exp(q*v/(kB_J*params.T))
@@ -271,21 +260,19 @@ if __name__ == "__main__":
         
         return n
 
-    # Returns total current as a function of voltage
+    # Returns total current as a function of voltage.
     def J(v):
         
-        # Changes of SCR with voltage
-        # This change is important below cell thickness of around 10 um
+        # Changes of SCR with voltage. This change is important below cell 
+        # thickness of around 10 um.
         dV = Vbi-v
         if (dV<0):
             dV=0
         
         W_E_scr=(1/N_E)*np.sqrt(2*dV*12*8.85E-12*1E-2/((1/N_E+1/N_B)*q)) 
         W_B_scr=(1/N_B)*np.sqrt(2*dV*12*8.85E-12*1E-2/((1/N_E+1/N_B)*q))
-        # Total width of the SCR
-        w_scr=W_E_scr+W_B_scr
 
-        # base
+        # Base.
         L_B = L_Auger(params.D_B,v,0,N_B)
         t_B = L_B**2 / params.D_B
         
@@ -304,30 +291,27 @@ if __name__ == "__main__":
         
         # ==========================================================
         
-        # emitter
+        # Emitter.
         L_E = L_Auger(params.D_E,v,N_E,0)
         t_E = L_E**2 / params.D_E
 
-        # currents as a function of energy
+        # Currents as a function of energy.
         J_B_vec = []
         J_E_vec = []
         J_scr_vec = []
-
-        # Do we need it?
-        #int_arg = []
 
         for i in range(len(en_vec)):
             
             alpha_LT = alpha_LT_func(i)
 
-            # reflection at the back interface
+            # Reflection at the back interface.
             Rb = 1
             
             z_B = (th_base - W_B_scr) / L_B
             
-            # BASE-- current at x = W_B_scr
-            # spectral factor to make A_B integrable
-            # integrating this quantity over energy gives 1
+            # Base -- current at x = W_B_scr.
+            # Spectral factor to make A_B integrable. Integrating this quantity 
+            # with respect to energy gives 1.
             spect_fact = am15g_vec[i]/en_vec[i] / solar_spect_int
             
             gamma_B = L_B **2 / (params.D_B * (1-alpha_LT**2*L_B**2) )
@@ -345,12 +329,12 @@ if __name__ == "__main__":
             
             J_B = q*params.D_B * ( B_B/L_B + gamma_B * ( -alpha_LT * a_minus * np.exp(-alpha_LT*(W_B_scr + params.th_emitter) )  + alpha_LT * a_plus * np.exp(-alpha_LT*(2*params.th- (W_B_scr + params.th_emitter) ))   )  ) 
         
-            # units '1E3': A --> mA
+            # Units '1E3': A --> mA.
             J_B = J_B * 1E3
         
             J_B_vec.append(J_B)
         
-            ## emitter -- current at x = W_E_scr
+            # Emitter -- current at x = W_E_scr.
             gamma_E = L_E**2 / (params.D_E * ( 1-alpha_LT**2*L_E**2 ) )
             
             z_E = (params.th_emitter - W_E_scr) / L_E
@@ -366,7 +350,7 @@ if __name__ == "__main__":
         
             J_E_vec.append(J_E)
             
-            # scr
+            # SCR.
             J_gen = q/alpha_LT * ( a_minus * ( np.exp(-alpha_LT*(-W_E_scr + params.th_emitter) ) - np.exp(-alpha_LT*(W_B_scr + params.th_emitter) )  ) + a_plus * ( np.exp(-alpha_LT*(2*params.th - (W_B_scr + params.th_emitter) )) - np.exp(-alpha_LT*(2*params.th - (-W_E_scr + params.th_emitter) )) )  )
             
             J_rec = q*params.ni_0*(W_E_scr + W_B_scr) / (t_E+t_B) * 2*np.sinh(q*v/(2*kB_J*params.T)) * (np.pi/2)    /   (  q*(Vbi-v)/ (kB_J*params.T)  )
@@ -378,31 +362,19 @@ if __name__ == "__main__":
             
             J_scr_vec.append(J_scr)
         
-        # integrate over energy to get total current
-        # for V=0 should be close to Jsc
+        # Integrate with respect to energy to get the total current.
+        # For V = 0 it should be close to Jsc.
         
         J_B_tot = np.trapz(J_B_vec,en_vec)
         J_E_tot = np.trapz(J_E_vec,en_vec)
         J_scr_tot = np.trapz(J_scr_vec,en_vec)
         
-        ni = np.sqrt(params.ni_0**2 *np.exp(bgn(N_E)/(kB*params.T)) )
-        n0 = 0.5*(N_E + np.sqrt((N_E)*(N_E) + 4 * ni**2))
-        p0 = ni**2 / n0
-        
-        eq_a = 1.0
-        eq_b = n0+p0
-        eq_c = n0*p0-ni**2 *np.exp(q*v/(kB_J*params.T))
-        
-        eq_delta = eq_b**2 -4*eq_a*eq_c
-        
-        dn = (-eq_b+np.sqrt(eq_delta))/(2*eq_a)
-        
-        return J_B_tot + J_scr_tot + J_E_tot #- q*1*dn*1E3
+        return J_B_tot + J_scr_tot + J_E_tot
         
     if (params.jv_flag):
 
-        v_vec = np.concatenate((np.linspace(0.0,0.59,10),np.linspace(0.6,0.85,250)))
-        #v_vec = np.linspace(0,0.85,1E3)
+        v_vec = np.concatenate((np.linspace(0.0,0.59,10),
+                                np.linspace(0.6,0.85,250)))
         
         j_vec = []
 
@@ -410,12 +382,12 @@ if __name__ == "__main__":
             J_V = J(v)
             j_vec.append(J_V)
             
-        # calculating Voc
+        # Calculating Voc.
         j_buff = j_vec[::-1]
         v_buff = v_vec[::-1]
         Voc = np.interp(0,j_buff,v_buff)
 
-        # truncate jv vectors above Voc
+        # Truncate jv vectors above Voc.
         i_max = np.where(v_vec>Voc)[0][0]
         v_vec = v_vec[:i_max+1]
         j_vec = j_vec[:i_max+1]
@@ -427,7 +399,7 @@ if __name__ == "__main__":
 
         Jsc = j_vec[0]
 
-        # save JV to a file
+        # Save JV to a file.
         JV_f = open("./Results/JV.dat","w")
         print>>JV_f, Voc
         print>>JV_f, Jsc
@@ -442,16 +414,15 @@ if __name__ == "__main__":
     
     else:
         
-        # optimization -- looking for maximum (minimum)
+        # Optimization: looking for maximum (minimum).
         # https://docs.scipy.org/doc/scipy-0.16.1/reference/generated/scipy.optimize.minimize_scalar.html#scipy.optimize.minimize_scalar
         optimization = opt.minimize_scalar(lambda v: -J(v)*v)
-        # print optimization
         eff = -optimization['fun']
-        # the spectrum is normalized, so eff=p_max
+        # The spectrum is normalized, so eff=p_max.
         p_max = -optimization['fun']
         Vm = optimization['x']
         Jsc = J(0)
-        # find Voc == root
+        # Find Voc which is root.
         Voc = opt.brenth(lambda v: J(v), Vm, 1)
     
     if (params.results_flag):
@@ -463,5 +434,6 @@ if __name__ == "__main__":
         print("Fill Factor: {0:.3f}".format((p_max/(Jsc*Voc))))
         print("Efficiency (%): {0:.3f}".format(eff))
     else:
-        print("{:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t".format( (th*1E4), S_B, Voc, Jsc, p_max/(Jsc*Voc), eff) )
+        print("{:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t"
+              .format( (th*1E4), S_B, Voc, Jsc, p_max/(Jsc*Voc), eff) )
         

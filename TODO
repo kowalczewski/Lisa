@@ -6,4 +6,5 @@
 - add photon recycling and radiative recombination term (probably can be neglected in Si, but needed if we would like to model GaAs solar cells)
 - update license
 - update the number of energy points
-- correct "The elements of style"
+- correct "The elements of style" (mainly spaces for +, *, brackets for long formula etc.)
+- no of points for JV curve should be a parameter
