@@ -4,3 +4,5 @@
 - add SRH recombination
 - add more comprehensive error handling
 - add photon recycling and radiative recombination term (probably can be neglected in Si, but needed if we would like to model GaAs solar cells)
+- update license
+- update the number of energy points
