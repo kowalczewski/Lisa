@@ -121,7 +121,6 @@ if __name__ == "__main__":
     # Green, Sol. Energy Mat. Sol. Cells 92 1305-10, 2008.
     # The data file has the following format:
     # Energy (eV) Wavelength (nm) eps1 eps2 n k Absorption coefficient (cm-1)
-    # 
     en_vec_TEMP = []
     n_vec_TEMP = []
     abs_coeff_vec_TEMP = []                        
@@ -394,18 +393,15 @@ if __name__ == "__main__":
 
         power = [v * j for v, j in zip(v_vec, j_vec)]
         p_max = max(power)
-        i_mpp = np.where(p==p_max)[0][0]
+        i_mpp = np.where(power==p_max)[0][0]
         v_m = v_vec[i_mpp]
 
         Jsc = j_vec[0]
 
         # Save JV to a file.
         JV_f = open("./Results/JV.dat","w")
-        print>>JV_f, Voc
-        print>>JV_f, Jsc
-        
         for i in range(len(v_vec)):
-            print>>JV_f, v_vec[i], j_vec[i]
+            print(str(v_vec[i])+'\t'+str(j_vec[i]), file=JV_f)
 
         print("\nJV characteristic saved to JV.dat file.")
         JV_f.close()

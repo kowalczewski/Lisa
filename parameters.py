@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
 
-# ====================================== DATA FILES ====================================
+# ======================== DATA FILES ========================
 # The files should be in Data/ directory (see example files).
 # Solar photon flux
 # Format: Energy (eV) AM1.5G (Wm-2eV-1)
@@ -29,22 +29,22 @@ solar_f = "am15g_en.dat"
 # The default optical functions of silicon are taken from:
 # Green, Sol. Energy Mat. Sol. Cells 92, 1305-10 (2008)
 si_f = "cSi_Green.dat"
-# ====================================== OUTPUT PARAMETERS =====================================
+# ======================== OUTPUT PARAMETERS ========================
 # If you want to do a loop over parameters, everything should be set to "false"
 # Print parameters of the structures
 params_flag = True
 # Calculate the full JV characteristic and save it to the file (can take much longer than standard simulations).
-jv_flag = False
+jv_flag = True
 # Show full results
 results_flag = True
 
-# ====================================== PARAMETERS ======================================
+# ======================== PARAMETERS ========================
 # temperature (K)
 T = 300
 # intrinsic carrier concentration (cm-3)
 ni_0 = 9.6541E9                                  
 
-# ====================================== STRUCTURE ======================================
+# ======================== STRUCTURE ========================
 # structure dimensions
 # in cm, to be consisten with calculations
 # thickness (cm)
@@ -54,7 +54,7 @@ th = 1*1E-4
 # emitter thickness (cm)
 th_emitter = 0.005E-4
 
-# ====================================== BASE ======================================
+# ======================== BASE ========================
 # base doping (cm-3)
 # n-type or p-type doping, the other should be 0
 N_a_B = 1E16
@@ -66,7 +66,7 @@ D_B = 25
 # if this value is given in the command line, the value below is overwritten
 S_B = 0
 
-# ====================================== EMITTER ======================================
+# ======================== EMITTER ========================
 # emitter doping (cm-3)
 # n-type or p-type doping, the other should be 0
 N_a_E = 0
@@ -76,7 +76,7 @@ D_E = 25/2
 # surface recombination velocities (cm/s)
 S_E = 0
 
-# ====================================== PARAMETERS OF THE ENERGY VECTOR ======================================
+# ======================== ENERGY VECTOR ========================
 en_start = 1.0
 en_stop = 4.4
 en_points = 1E3
