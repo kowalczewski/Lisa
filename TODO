@@ -8,3 +8,5 @@
 - update the number of energy points
 - correct "The elements of style" (mainly spaces for +, *, brackets for long formula etc.)
 - no of points for JV curve should be a parameter
+- nicer plots? (using ax.)
+- give arguments using, e.g., -i
