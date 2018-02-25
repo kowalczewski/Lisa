@@ -38,7 +38,7 @@ si_f = "cSi_Green.dat"
 params_flag = True
 # Calculate the full JV characteristic and save it to the file 
 # (can take much longer than standard simulations).
-jv_flag = True
+jv_flag = False
 # Show full results
 results_flag = True
 
@@ -51,10 +51,6 @@ ni_0 = 9.6541E9
 # ======================== STRUCTURE ========================
 # structure dimensions
 # in cm, to be consisten with calculations
-# thickness (cm)
-# this value can be also given in the command line (as the 1st argument)
-# if this value is given in the command line, the value below is overwritten
-th = 1*1E-4
 # emitter thickness (cm)
 th_emitter = 0.005E-4
 

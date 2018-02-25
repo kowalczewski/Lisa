@@ -164,7 +164,7 @@ if __name__ == "__main__":
         a = 0.935
         b = 0.67        
 
-        x = a * (abs_coeff_vec[i]*params.th)**b
+        x = a * (abs_coeff_vec[i]*th)**b
         eff_LPE = (2.0+x)/(1.0+x)
         return abs_coeff_vec[i] * eff_LPE
 
@@ -317,18 +317,18 @@ if __name__ == "__main__":
             
             gamma_B = L_B **2 / (params.D_B * (1-alpha_LT**2*L_B**2) )
             
-            F1 = Rb * np.exp(-2*alpha_LT*params.th)
+            F1 = Rb * np.exp(-2*alpha_LT*th)
             
             # 1/q: W --> eV
             # 1E-4: 1/m2 --> 1/cm2 
             a_minus = alpha_LT * am15g_vec[i]/en_vec[i] / (1 - F1 * (1-1/n_vec[i]**2) ) * 1/q * 1E-4 
             a_plus = a_minus * Rb
 
-            A_B = ni_B**2/p(v) * (np.exp(q*v/(kB_J*params.T)) - 1) * spect_fact - gamma_B * ( a_minus * np.exp(-alpha_LT*(W_B_scr + params.th_emitter) )  + a_plus * np.exp(-alpha_LT*(2*params.th- (W_B_scr + params.th_emitter) ))   ) 
+            A_B = ni_B**2/p(v) * (np.exp(q*v/(kB_J*params.T)) - 1) * spect_fact - gamma_B * ( a_minus * np.exp(-alpha_LT*(W_B_scr + params.th_emitter) )  + a_plus * np.exp(-alpha_LT*(2*th - (W_B_scr + params.th_emitter) ))   ) 
             
-            B_B = ( - A_B * ( params.D_B/L_B * np.sinh(z_B) + S_B * np.cosh(z_B) ) - gamma_B * ( a_minus * np.exp(-alpha_LT*params.th ) * (S_B - alpha_LT * params.D_B) + a_plus *  np.exp(-alpha_LT*(2*params.th- (th_base + params.th_emitter) )) * (S_B + alpha_LT * params.D_B) ) ) / (params.D_B/L_B*np.cosh(z_B) + S_B * np.sinh(z_B))
+            B_B = ( - A_B * ( params.D_B/L_B * np.sinh(z_B) + S_B * np.cosh(z_B) ) - gamma_B * ( a_minus * np.exp(-alpha_LT*th ) * (S_B - alpha_LT * params.D_B) + a_plus *  np.exp(-alpha_LT*(2*th- (th_base + params.th_emitter) )) * (S_B + alpha_LT * params.D_B) ) ) / (params.D_B/L_B*np.cosh(z_B) + S_B * np.sinh(z_B))
             
-            J_B = q*params.D_B * ( B_B/L_B + gamma_B * ( -alpha_LT * a_minus * np.exp(-alpha_LT*(W_B_scr + params.th_emitter) )  + alpha_LT * a_plus * np.exp(-alpha_LT*(2*params.th- (W_B_scr + params.th_emitter) ))   )  ) 
+            J_B = q*params.D_B * ( B_B/L_B + gamma_B * ( -alpha_LT * a_minus * np.exp(-alpha_LT*(W_B_scr + params.th_emitter) )  + alpha_LT * a_plus * np.exp(-alpha_LT*(2*th- (W_B_scr + params.th_emitter) ))   )  ) 
         
             # Units '1E3': A --> mA.
             J_B = J_B * 1E3
@@ -340,11 +340,11 @@ if __name__ == "__main__":
             
             z_E = (params.th_emitter - W_E_scr) / L_E
             
-            A_E = ni_E**2/n(v) * (np.exp(q*v/(kB_J*params.T)) - 1) * spect_fact - gamma_E*( a_minus * np.exp(-alpha_LT*(params.th_emitter - W_E_scr) )  + a_plus * np.exp(-alpha_LT*(2*params.th- (params.th_emitter-W_E_scr) ))   ) 
+            A_E = ni_E**2/n(v) * (np.exp(q*v/(kB_J*params.T)) - 1) * spect_fact - gamma_E*( a_minus * np.exp(-alpha_LT*(params.th_emitter - W_E_scr) )  + a_plus * np.exp(-alpha_LT*(2*th- (params.th_emitter-W_E_scr) ))   ) 
             
-            B_E = (-A_E * ( params.D_E/L_E * np.sinh(z_E)  + params.S_E *np.cosh(z_E) )  -gamma_E * (a_minus*(params.S_E+alpha_LT*params.D_E) + a_plus*np.exp(-2*alpha_LT*params.th)*(params.S_E-alpha_LT*params.D_E)   ) )  / (params.D_E/L_E*np.cosh(z_E) + params.S_E*np.sinh(z_E) )
+            B_E = (-A_E * ( params.D_E/L_E * np.sinh(z_E)  + params.S_E *np.cosh(z_E) )  -gamma_E * (a_minus*(params.S_E+alpha_LT*params.D_E) + a_plus*np.exp(-2*alpha_LT*th)*(params.S_E-alpha_LT*params.D_E)   ) )  / (params.D_E/L_E*np.cosh(z_E) + params.S_E*np.sinh(z_E) )
             
-            J_E = q*params.D_E* ( -B_E/L_E + gamma_E * ( -alpha_LT * a_minus * np.exp(-alpha_LT*(-W_E_scr + params.th_emitter) )  + alpha_LT * a_plus * np.exp(-alpha_LT*(2*params.th - (-W_E_scr + params.th_emitter) ))   ) )
+            J_E = q*params.D_E* ( -B_E/L_E + gamma_E * ( -alpha_LT * a_minus * np.exp(-alpha_LT*(-W_E_scr + params.th_emitter) )  + alpha_LT * a_plus * np.exp(-alpha_LT*(2*th - (-W_E_scr + params.th_emitter) ))   ) )
             
             # units '1E3': A --> mA
             J_E = - J_E * 1E3
@@ -352,7 +352,7 @@ if __name__ == "__main__":
             J_E_vec.append(J_E)
             
             # SCR.
-            J_gen = q/alpha_LT * ( a_minus * ( np.exp(-alpha_LT*(-W_E_scr + params.th_emitter) ) - np.exp(-alpha_LT*(W_B_scr + params.th_emitter) )  ) + a_plus * ( np.exp(-alpha_LT*(2*params.th - (W_B_scr + params.th_emitter) )) - np.exp(-alpha_LT*(2*params.th - (-W_E_scr + params.th_emitter) )) )  )
+            J_gen = q/alpha_LT * ( a_minus * ( np.exp(-alpha_LT*(-W_E_scr + params.th_emitter) ) - np.exp(-alpha_LT*(W_B_scr + params.th_emitter) )  ) + a_plus * ( np.exp(-alpha_LT*(2*th - (W_B_scr + params.th_emitter) )) - np.exp(-alpha_LT*(2*th - (-W_E_scr + params.th_emitter) )) )  )
             
             J_rec = q*params.ni_0*(W_E_scr + W_B_scr) / (t_E+t_B) * 2*np.sinh(q*v/(2*kB_J*params.T)) * (np.pi/2)    /   (  q*(Vbi-v)/ (kB_J*params.T)  )
             
