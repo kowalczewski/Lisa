@@ -43,16 +43,14 @@ if __name__ == "__main__":
         v_vec = []
         j_vec = []
         with open("./Results/"+jv_filename) as jv_f:
-            # read Jsc and Voc
-            voc = float(jv_f.readline())
-            jsc = float(jv_f.readline())
+            # Read Jsc and Voc.
             for line in jv_f:
                 line = line.split()
                 v_vec.append(float(line[0]))
                 j_vec.append(float(line[1]))
 
         plt.plot(v_vec, j_vec, linewidth=2)
-        plt.ylim(0,myround(jsc))
+        plt.ylim(0,myround(j_vec[0]))
         plt.xlabel('Voltage (V)')
         plt.ylabel('Current density (mA/cm2)')
 

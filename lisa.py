@@ -403,7 +403,7 @@ if __name__ == "__main__":
         # Save JV to a file.
         JV_f = open("./Results/JV.dat","w")
         for i in range(len(v_vec)):
-            print(str(v_vec[i])+'\t'+str(j_vec[i]), file=JV_f)
+            print('{:.3f} {:.3f}'.format(v_vec[i], j_vec[i]), file = JV_f)
 
         print("\nJV characteristic saved to JV.dat file.")
         JV_f.close()
