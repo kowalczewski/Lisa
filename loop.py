@@ -1,6 +1,8 @@
 '''
 This script prepares data for batch calculations.
 
+Copyright 2016-2018 Piotr Kowalczewski
+
 This file is part of Lisa.
 
 Lisa is free software: you can redistribute it and/or modify
@@ -18,23 +20,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
 
-from numpy import *
+import numpy as np
 
 if __name__ == "__main__":
-	
-	"""
-        Usage: python loop.py
-    """
+    
+    """ Usage: python loop.py """
+    
+    th_vec = np.logspace(0,2.7,100)
+    # srv_vec = logspace(-1,2,50)
+    # for no SR
+    srv_vec = [0]
 
-	th_vec = logspace(0,2.7,100)
-	# srv_vec = logspace(-1,2,50)
-	# for no SR
-	srv_vec = [0]
+    loop_f = open('loop.sh','w')
 
-	sh_f = open('loop.sh','w')
-
-	for th in th_vec:
-		for srv in srv_vec:
-			print>>sh_f, 'python lisa.py ', th, srv
-		
-	sh_f.close()
+    for th in th_vec:
+        for srv in srv_vec:
+            print('python lisa.py {:.3f} {:.3f}'.format(th, srv), file = loop_f)
+        
+    loop_f.close()
