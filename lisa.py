@@ -328,38 +328,22 @@ if __name__ == "__main__":
     # Green, Sol. Energy Mat. Sol. Cells 92 1305-10, 2008.
     # The data file has the following format:
     # Energy (eV) Wavelength (nm) eps1 eps2 n k Absorption coefficient (cm-1)
-    en_vec_TEMP = []
-    ref_indx_vec_TEMP = []
-    abs_coeff_vec_TEMP = []                        
-    for line in open("./Data/"+params.si_f):
-        line = line.split()
-        en_vec_TEMP.append(float(line[0]))
-        ref_indx_vec_TEMP.append(float(line[4]))
-        abs_coeff_vec_TEMP.append(float(line[6]))
-    
-    en_vec_TEMP.reverse()
-    ref_indx_vec_TEMP.reverse()
-    abs_coeff_vec_TEMP.reverse()
 
-    ref_indx_vec = np.interp(en_vec, en_vec_TEMP, ref_indx_vec_TEMP)
-    abs_coeff_vec = np.interp(en_vec, en_vec_TEMP, abs_coeff_vec_TEMP)
+    si_data = np.genfromtxt('./Data/'+params.si_f, delimiter='\t')
+    si_data = np.flip(si_data, axis=0)
+
+    ref_indx_vec = np.interp(en_vec, si_data[:,0], si_data[:,4])
+    abs_coeff_vec = np.interp(en_vec, si_data[:,0], si_data[:,6])
+    
     alpha_LT_vec = alpha_LT_func(abs_coeff_vec)
 
     # Solar spectrum. Units:
-    # Energy (eV)  AM1.5G (Wm-2eV-1)
-    en_vec_TEMP = []
-    am15g_vec_TEMP = []
-    for line in open("./Data/"+params.solar_f):
-        line = line.split()
-        en_vec_TEMP.append(float(line[0]))
-        am15g_vec_TEMP.append(float(line[1]))
-        
-    en_vec_TEMP.reverse()
-    am15g_vec_TEMP.reverse()
-    am15g_vec = np.interp(en_vec, en_vec_TEMP, am15g_vec_TEMP)
+    # Energy (eV)  AM1.5G (Wm-2eV-1)    
+    am15g_data = np.genfromtxt('./Data/'+params.solar_f, delimiter='\t')
+    am15g_data = np.flip(am15g_data, axis=0)
+    am15g_vec = np.interp(en_vec, am15g_data[:,0], am15g_data[:,1])
     
     # Integrated solar spectrum/energy -- for spect_fact
-    # (such a simple notation works).
     solar_spect_int = np.trapz(am15g_vec/en_vec,en_vec)
 
     if (params.jv_flag):
@@ -375,7 +359,6 @@ if __name__ == "__main__":
             J_V = J_v(v)
             j_vec.append(J_V)
    
-               
         # Calculating Voc.
         j_buff = j_vec[::-1]
         v_buff = v_vec[::-1]
