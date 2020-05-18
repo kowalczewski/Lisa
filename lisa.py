@@ -2,7 +2,7 @@
 Lisa is a code to model the performance of solar cells using an extended Hovel 
 model.
 
-Copyright 2016-2018 Piotr Kowalczewski
+Copyright 2016-2020 Piotr Kowalczewski
 
 Reference technical paper:
 Piotr Kowalczewski, Lisa Redorici, Angelo Bozzola, Lucio Claudio Andreani,
@@ -312,13 +312,13 @@ if __name__ == "__main__":
     # ======================== OUTPUT ========================
     if (params.params_flag):
         print('\n============ Parameters of the structure ============\n')
-        print('Built-in potential of the junction (V): \t\t {:.3f}'
+        print('Built-in potential of the junction (V): \t\t {:.5f}'
               .format(Vbi))
-        print('Cell thickness (um): \t\t\t\t\t {:.3f}'.format(th*1E4))
-        print('Emitter thickness (um): \t\t\t\t {:.3f}'
+        print('Cell thickness (um): \t\t\t\t\t {:.5f}'.format(th*1E4))
+        print('Emitter thickness (um): \t\t\t\t {:.5f}'
               .format(params.th_emitter*1E4))
-        print('SCR thickness (um): \t\t\t\t\t {:.3f}'.format(w_scr*1E4))
-        print('Thickness of the quasi-neutral n-type region (um): \t {:.3f}'
+        print('SCR thickness (um): \t\t\t\t\t {:.5f}'.format(w_scr*1E4))
+        print('Thickness of the quasi-neutral n-type region (um): \t {:.5f}'
               .format(w_n*1E4))
 
     en_vec = np.linspace(params.en_start,params.en_stop,int(params.en_points))
@@ -379,7 +379,7 @@ if __name__ == "__main__":
         # Save JV to a file.
         JV_f = open("./Results/JV.dat","w")
         for i in range(len(v_vec)):
-            print('{:.3f} {:.3f}'.format(v_vec[i], j_vec[i]), file = JV_f)
+            print('{:.5f} {:.5f}'.format(v_vec[i], j_vec[i]), file = JV_f)
 
         #print("\nJV characteristic saved to JV.dat file.")
         JV_f.close()
@@ -401,13 +401,12 @@ if __name__ == "__main__":
     
     if (params.results_flag):
         print('\n============ Results ============\n')
-        print("Thickness (um): {0:.3f}".format(th*1E4)) 
-        print("Bottom SRV (cm/s): {0:.3f}".format(S_B))
-        print("Open-circuit voltage (V): {0:.3f}".format(Voc))
-        print("Short-circuit current density (mA/cm2): {0:.3f}".format(Jsc))
-        print("Fill Factor: {0:.3f}".format((p_max/(Jsc*Voc))))
-        print("Efficiency (%): {0:.3f}".format(eff))
+        print("Thickness (um): {0:.5f}".format(th*1E4)) 
+        print("Bottom SRV (cm/s): {0:.5f}".format(S_B))
+        print("Open-circuit voltage (V): {0:.5f}".format(Voc))
+        print("Short-circuit current density (mA/cm2): {0:.5f}".format(Jsc))
+        print("Fill Factor: {0:.5f}".format((p_max/(Jsc*Voc))))
+        print("Efficiency (%): {0:.5f}".format(eff))
     else:
-        print("{:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t {:.3f} \t"
+        print("{:.5f} \t {:.5f} \t {:.5f} \t {:.5f} \t {:.5f} \t {:.5f} \t"
               .format( (th*1E4), S_B, Voc, Jsc, p_max/(Jsc*Voc), eff) )
-        
