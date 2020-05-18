@@ -35,6 +35,6 @@ if __name__ == "__main__":
 
     for th in th_vec:
         for srv in srv_vec:
-            print('python lisa.py {:.3f} {:.3f}'.format(th, srv), file = loop_f)
+            print('python lisa.py {:.5f} {:.5f}'.format(th, srv), file = loop_f)
         
     loop_f.close()
